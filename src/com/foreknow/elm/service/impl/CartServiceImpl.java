@@ -34,8 +34,15 @@ public class CartServiceImpl implements CartService {
         CartDao cartDao = new CartDaoImpl();
         try {
             DBUtil.getConnection();
+            DBUtil.beginTransaction();
             result = cartDao.saveCartDao(userId, businessId, foodId);
-        } catch (SQLException e) {
+            DBUtil.commitTransaction();
+            try {
+                DBUtil.rollbackTransaction();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             DBUtil.close();
@@ -49,10 +56,17 @@ public class CartServiceImpl implements CartService {
         CartDao cartDao = new CartDaoImpl();
         try {
             DBUtil.getConnection();
-            result = cartDao.updateCartDao(businessId,foodId,quantity,userId);
-        } catch (SQLException e) {
+            DBUtil.beginTransaction();
+            result = cartDao.updateCartDao(businessId, foodId, quantity, userId);
+            DBUtil.commitTransaction();
+            try {
+                DBUtil.rollbackTransaction();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             DBUtil.close();
         }
         return result;
@@ -64,10 +78,17 @@ public class CartServiceImpl implements CartService {
         CartDao cartDao = new CartDaoImpl();
         try {
             DBUtil.getConnection();
+            DBUtil.beginTransaction();
             result = cartDao.removeCartDao(userId, businessId, foodId);
-        } catch (SQLException e) {
+            DBUtil.commitTransaction();
+            try {
+                DBUtil.rollbackTransaction();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             DBUtil.close();
         }
         return result;

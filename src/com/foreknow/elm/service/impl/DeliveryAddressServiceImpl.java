@@ -47,8 +47,15 @@ public class DeliveryAddressServiceImpl implements DeliveryAddressService {
         DeliveryAddressDao deliveryAddressDao = new DeliveryAddressDaoImpl();
         try {
             DBUtil.getConnection();
+            DBUtil.beginTransaction();
             result = deliveryAddressDao.saveDeliveryAddressDao(contactName, contactSex, contactTel, address, userId);
-        } catch (SQLException e) {
+            DBUtil.commitTransaction();
+            try {
+                DBUtil.rollbackTransaction();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             DBUtil.close();
@@ -62,8 +69,15 @@ public class DeliveryAddressServiceImpl implements DeliveryAddressService {
         DeliveryAddressDao deliveryAddressDao = new DeliveryAddressDaoImpl();
         try {
             DBUtil.getConnection();
+            DBUtil.beginTransaction();
             result = deliveryAddressDao.updateDeliveryAddressDao(contactName, contactSex, contactTel, address, userId, daId);
-        } catch (SQLException e) {
+            DBUtil.commitTransaction();
+            try {
+                DBUtil.rollbackTransaction();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             DBUtil.close();
@@ -77,8 +91,15 @@ public class DeliveryAddressServiceImpl implements DeliveryAddressService {
         DeliveryAddressDao deliveryAddressDao = new DeliveryAddressDaoImpl();
         try {
             DBUtil.getConnection();
+            DBUtil.beginTransaction();
             result = deliveryAddressDao.removeDeliveryAddressDao(daId);
-        } catch (SQLException e) {
+            DBUtil.commitTransaction();
+            try {
+                DBUtil.rollbackTransaction();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             DBUtil.close();

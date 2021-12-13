@@ -19,7 +19,10 @@ public class CartController {
      */
     public List<Cart> listCart(HttpServletRequest request)throws Exception{
         String userId = request.getParameter("userId");
-        Integer businessId = Integer.valueOf(request.getParameter("businessId"));
+        Integer businessId = null;
+        if (request.getParameter("businessId") != null){
+            businessId = Integer.valueOf(request.getParameter("businessId"));
+        }
         CartService cartService = new CartServiceImpl();
         List<Cart> list = new ArrayList<>();
         list = cartService.listCartService(userId, businessId);
@@ -69,7 +72,10 @@ public class CartController {
     public int removeCart (HttpServletRequest request)throws Exception{
         String userId = request.getParameter("userId");
         Integer businessId = Integer.valueOf(request.getParameter("businessId"));
-        Integer foodId = Integer.valueOf(request.getParameter("foodId"));
+        Integer foodId = null;
+        if (request.getParameter("foodId") != null){
+            foodId = Integer.valueOf(request.getParameter("foodId"));
+        }
         CartService cartService = new CartServiceImpl();
         int result = 0;
         result = cartService.removeCartService(userId, businessId, foodId);

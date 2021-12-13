@@ -21,7 +21,7 @@ public class CartDaoImpl implements CartDao {
     @Override
     public List<Cart> listCartDao(String userId, Integer businessId) throws SQLException {
         List<Cart> list = new ArrayList<>();
-        StringBuffer stringBuffer = new StringBuffer("select * from cart c, business b, food f where c.businessId=b.businessId and c.foodId = f.foodId and c.userId = ?");
+        StringBuffer stringBuffer = new StringBuffer("select * from cart c left outer join business b on c.businessId=b.businessId left outer join food f on c.foodId = f.foodId where c.userId = ?");
         if (businessId != null) {
             stringBuffer.append(" and c.businessId = ?");
         }
@@ -30,7 +30,9 @@ public class CartDaoImpl implements CartDao {
             con = DBUtil.getConnection();
             pst = con.prepareStatement(sql);
             pst.setString(1, userId);
-            pst.setInt(2, businessId);
+            if (businessId != null) {
+                pst.setInt(2, businessId);
+            }
             rs = pst.executeQuery();
             while (rs.next()) {
                 Cart cart = new Cart();
@@ -41,8 +43,6 @@ public class CartDaoImpl implements CartDao {
                 cart.setBusinessId(rs.getInt("businessId"));
                 cart.setUserId(rs.getString("userId"));
                 cart.setQuantity(rs.getInt("quantity"));
-                cart.setBusiness(business);
-                cart.setFood(food);
                 business.setBusinessName(rs.getString("businessName"));
                 business.setBusinessAddress(rs.getString("businessAddress"));
                 business.setBusinessExplain(rs.getString("businessExplain"));
@@ -57,6 +57,8 @@ public class CartDaoImpl implements CartDao {
                 food.setFoodPrice(rs.getDouble("foodPrice"));
                 food.setBusinessId(rs.getInt("businessId"));
                 food.setRemarks(rs.getString("remarks"));
+                cart.setBusiness(business);
+                cart.setFood(food);
                 list.add(cart);
             }
         } finally {
@@ -102,7 +104,6 @@ public class CartDaoImpl implements CartDao {
             DBUtil.close(rs, pst);
         }
         return result;
-
     }
 
     @Override
@@ -113,12 +114,14 @@ public class CartDaoImpl implements CartDao {
             stringBuffer.append(" and foodId = ?");
         }
         String sql = stringBuffer.toString();
-        try{
+        try {
             con = DBUtil.getConnection();
             pst = con.prepareStatement(sql);
             pst.setString(1, userId);
             pst.setInt(2, businessId);
-            pst.setInt(3, foodId);
+            if (foodId != null) {
+                pst.setInt(3, foodId);
+            }
             int rs = pst.executeUpdate();
             result = rs;
         } finally {

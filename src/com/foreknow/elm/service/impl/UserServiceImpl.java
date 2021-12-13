@@ -45,8 +45,15 @@ public class UserServiceImpl implements UserService {
         UserDao userDao = new UserDaoImpl();
         try {
             DBUtil.getConnection();
+            DBUtil.beginTransaction();
             result = userDao.saveUserDao(userId, userName, password, userSex);
-        } catch (SQLException e) {
+            DBUtil.commitTransaction();
+            try {
+                DBUtil.rollbackTransaction();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             DBUtil.close();

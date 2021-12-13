@@ -17,10 +17,10 @@ public class OrderDetailetServiceImpl implements OrderDetailetService {
         OrderDetailetDao orderDetailetDao = new OrderDetailetDaoImpl();
         try {
             DBUtil.getConnection();
-            orderDetailetDao.getOrderDetailetByOrderIdDao(orderId);
+            list = orderDetailetDao.getOrderDetailetByOrderIdDao(orderId);
         } catch (SQLException e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             DBUtil.close();
         }
         return list;

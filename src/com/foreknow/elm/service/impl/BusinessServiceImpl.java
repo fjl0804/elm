@@ -10,33 +10,33 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BusinessServiceImpl implements BusinessService {
-  @Override
-  public List<Business> listBusinessByTypeId(Integer orderTypeId) {
-    List<Business> list  = new ArrayList<>();
-    BusinessDao dao = new BusinessDaoImpl();
-    try {
-      DBUtil.getConnection();
-      list = dao.listBusinessByOrderTypeId(orderTypeId);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }finally {
-      DBUtil.close();
+    @Override
+    public List<Business> listBusinessByTypeId(Integer orderTypeId) {
+        List<Business> list = new ArrayList<>();
+        BusinessDao dao = new BusinessDaoImpl();
+        try {
+            DBUtil.getConnection();
+            list = dao.listBusinessByOrderTypeId(orderTypeId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            DBUtil.close();
+        }
+        return list;
     }
-    return list;
-  }
 
-  @Override
-  public Business getBusinessById(Integer businessId) {
-    Business business = null;
-    BusinessDao dao = new BusinessDaoImpl();
-    try {
-      DBUtil.getConnection();
-      business = dao.getBusinessById(businessId);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }finally {
-      DBUtil.close();
+    @Override
+    public Business getBusinessById(Integer businessId) {
+        Business business = null;
+        BusinessDao dao = new BusinessDaoImpl();
+        try {
+            DBUtil.getConnection();
+            business = dao.getBusinessById(businessId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            DBUtil.close();
+        }
+        return business;
     }
-    return business;
-  }
 }

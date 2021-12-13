@@ -20,7 +20,7 @@ public class OrderDetailetDaoImpl implements OrderDetailetDao {
     @Override
     public List<OrderDetailet> getOrderDetailetByOrderIdDao(Integer orderId) throws SQLException {
         List<OrderDetailet> list = new ArrayList<>();
-        String sql = "select * from orderDetailet od, food fd where od.foodId=fd.foodId orderId = ?";
+        String sql = "select * from orderDetailet od left outer join food fd on  od.foodId=fd.foodId where orderId = ?";
         try {
             con = DBUtil.getConnection();
             pst = con.prepareStatement(sql);
@@ -39,11 +39,38 @@ public class OrderDetailetDaoImpl implements OrderDetailetDao {
                 food.setFoodPrice(rs.getDouble("foodPrice"));
                 food.setBusinessId(rs.getInt("businessId"));
                 food.setRemarks(rs.getString("remarks"));
+                orderDetailet.setFood(food);
                 list.add(orderDetailet);
             }
         } finally {
             DBUtil.close(rs, pst);
         }
         return list;
+    }
+
+    @Override
+    public int saveOrderDetailDao(List<OrderDetailet> list) throws SQLException {
+        int result = 0;
+        //根据list长度确定sql语句
+        StringBuffer stringBuffer = new StringBuffer("insert into orderDetailet(orderId,foodId,quantity) values(?,?,?)");
+        for (int i = 1; i < list.size(); i++){
+            stringBuffer.append(",(?,?,?)");
+        }
+        String sql = stringBuffer.toString();
+        try {
+            con = DBUtil.getConnection();
+            pst = con.prepareStatement(sql);
+            //对?传参
+            for (int i = 0; i < list.size(); i++){
+                pst.setInt(1+i*3, list.get(i).getOrderId());
+                pst.setInt(2+i*3, list.get(i).getFoodId());
+                pst.setInt(3+i*3, list.get(i).getQuantity());
+            }
+            int rs = pst.executeUpdate();
+            result = rs;
+        } finally {
+            DBUtil.close(rs, pst);
+        }
+        return result;
     }
 }

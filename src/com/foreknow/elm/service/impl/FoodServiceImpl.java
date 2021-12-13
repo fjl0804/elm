@@ -19,7 +19,7 @@ public class FoodServiceImpl implements FoodService {
             list = foodDao.listFoodByBusinessIdDao(businessId);
         } catch (Exception e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             DBUtil.close();
         }
         return list;

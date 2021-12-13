@@ -13,6 +13,9 @@ import java.util.List;
 public class DeliveryAddressController {
     /**
      * 根据用户编号查询所属送货地址
+     * @param request
+     * @return
+     * @throws Exception
      */
     public List<DeliveryAddress> listDeliveryAddressByUserId(HttpServletRequest request) throws Exception{
         String userId = request.getParameter("userId");
